@@ -23,6 +23,7 @@ public class WebUserModel {
     private Long customerId;
     private Integer status;
     private List<String> featureGated = new ArrayList<>();
+    private List<PermissionModel> permissions;
 
     public WebUserModel(WebUser webUser) {
         this.webId = webUser.getWebId();

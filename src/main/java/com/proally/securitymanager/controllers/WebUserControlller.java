@@ -25,7 +25,12 @@ public class WebUserControlller {
     }
 
     @PostMapping("auth/singup")
-    private ResponseEntity<WebUserModel> signup(@RequestBody WebUserModel webUserModel) {
+    public ResponseEntity<WebUserModel> signup(@RequestBody WebUserModel webUserModel) {
         return ResponseEntity.ok(webUserService.signup(webUserModel));
+    }
+
+    @GetMapping("/user/currentUser")
+    public ResponseEntity<WebUserModel> getUser(@AuthenticationPrincipal AuthUserInfo userInfo) {
+        return ResponseEntity.ok(webUserService.getUserDetails(userInfo));
     }
 }
