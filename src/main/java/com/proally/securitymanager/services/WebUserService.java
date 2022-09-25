@@ -10,6 +10,7 @@ import java.util.Collection;
 
 public interface WebUserService {
     WebUserModel signup(WebUserModel webUser);
+    WebUserModel getUserDetails(AuthUserInfo user);
 
     Page<WebUserModel> getAllUsers(AuthUserInfo userInfo, Boolean active, Pageable pageable);
 }

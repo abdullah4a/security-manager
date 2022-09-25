@@ -1,6 +1,8 @@
 package com.proally.securitymanager.services.Impl;
 
 import com.proally.securitymanager.domain.WebUser;
+import com.proally.securitymanager.exception.ResourceNotFoundException;
+import com.proally.securitymanager.models.PermissionModel;
 import com.proally.securitymanager.models.WebUserModel;
 import com.proally.securitymanager.repositories.WebUserRepository;
 import com.proally.securitymanager.security.AuthUserInfo;
@@ -13,7 +15,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
+import static com.proally.securitymanager.common.Constants.RECORD_DOES_NOT_EXIST_FOR_ID;
 import static com.proally.securitymanager.specifications.WebUserSpecifications.withStatusActive;
 
 @Service
@@ -40,6 +44,22 @@ public class WebUserServiceImpl implements WebUserService {
         webUser.setPhoneNumber(webUserModel.getPhoneNumber());
         webUser.setStatus(WebUser.STATUS_ACTIVE);
         return new WebUserModel(webUserRepository.save(webUser));
+    }
+
+    @Override
+    public WebUserModel getUserDetails(AuthUserInfo user) {
+        return webUserRepository.findByWebIdAndActiveAndStatus(user.getWebId(), true, WebUser.STATUS_ACTIVE).map(webUser1 -> {
+            WebUserModel webUserModel = new WebUserModel();
+            webUserModel.setDescription(webUser1.getFirstName() + " " + webUser1.getLastName());
+            webUserModel.setEmail(webUser1.getEmail());
+            webUserModel.setWebId(webUser1.getWebId());
+            webUserModel.setFirstName(webUser1.getFirstName());
+            webUserModel.setLastName(webUser1.getLastName());
+            webUserModel.setFirstName(webUser1.getFirstName());
+            var permissions = webUserRepository.getPermissionForWebUser(webUser1).stream().map(PermissionModel::new).collect(Collectors.toList());
+            webUserModel.setPermissions(permissions);
+            return webUserModel;
+        }).orElseThrow(() -> new ResourceNotFoundException(RECORD_DOES_NOT_EXIST_FOR_ID + user.getWebId()));
     }
 
 }

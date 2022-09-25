@@ -12,9 +12,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/user")
 @RequiredArgsConstructor
-public class WebUserControlller {
+public class WebUserController {
     @NonNull
     private final WebUserService webUserService;
 
@@ -24,8 +24,13 @@ public class WebUserControlller {
         return ResponseEntity.ok(webUserService.getAllUsers(user, true, pageable));
     }
 
-    @PostMapping("auth/singup")
-    private ResponseEntity<WebUserModel> signup(@RequestBody WebUserModel webUserModel) {
+    @PostMapping("/auth/singup")
+    public ResponseEntity<WebUserModel> signup(@RequestBody WebUserModel webUserModel) {
         return ResponseEntity.ok(webUserService.signup(webUserModel));
+    }
+
+    @GetMapping("/currentUser")
+    public ResponseEntity<WebUserModel> getUser(@AuthenticationPrincipal AuthUserInfo userInfo) {
+        return ResponseEntity.ok(webUserService.getUserDetails(userInfo));
     }
 }

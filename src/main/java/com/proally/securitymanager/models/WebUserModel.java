@@ -23,11 +23,13 @@ public class WebUserModel {
     private Long customerId;
     private Integer status;
     private List<String> featureGated = new ArrayList<>();
+    private List<PermissionModel> permissions;
+    private String active;
 
     public WebUserModel(WebUser webUser) {
         this.webId = webUser.getWebId();
         this.description = webUser.getFirstName() + " " + webUser.getLastName();
-        this.status = webUser.getStatus();
+        this.active = webUser.getStatus() == 0 ? "Active" : "Not Active";
         this.email = webUser.getEmail();
         this.phoneNumber = webUser.getPhoneNumber();
     }
