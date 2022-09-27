@@ -3,6 +3,13 @@
 -- //////////////////////
 Delete
 from web_user_role;
+
+-- //////////////////////
+-- Admin User
+-- //////////////////////
+Delete
+from web_user
+where email ilike '%admin%';
 Delete
 from role_permission;
 Delete
@@ -73,13 +80,6 @@ VALUES (7, 0, '2022-05-21 12:23:05.388000 +00:00', '2022-05-21 12:23:05.388000 +
 
 INSERT INTO public.web_user_role (web_id, version, date_created, date_updated, web_user_id, role_id, active)
 VALUES (1, 0, '2022-04-28 15:52:46.889390 +00:00', '2022-04-28 15:52:46.889390 +00:00', 1, 3, true);
-
--- //////////////////////
--- Admin User
--- //////////////////////
-Delete
-from web_user
-where email ilike '%admin%';
 
 INSERT INTO public.web_user (web_id, version, date_created, date_updated, status, first_name,
                              last_name, email, user_name, password, gender, dob, active, middle_name, time_zone,
